@@ -69,6 +69,8 @@ public class ToDoItem {
         }
     }
 
+    public ToDoItem(){}
+
     public ToDoItem(Integer id, String name, String notes, Priority priority, Date dueDate, Status status) {
         this.id = id;
         this.name = name;

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.codepath.simpletodo.adapter.ToDoItemAdapter;
 import com.codepath.simpletodo.storage.SimpleTodoStorage;
 import com.codepath.simpletodo.storage.impl.sqllite.SqlLiteSimpleTodoStorage;
 import com.codepath.simpletodo.model.ToDoItem;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         //storage = new FileSimpleTodoStorage(getFilesDir());
         storage = new SqlLiteSimpleTodoStorage(getApplicationContext());
         items = storage.read();
-        itemsAdapter = new ArrayAdapter<>(this,
+        itemsAdapter = new ToDoItemAdapter(this,
                 android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
