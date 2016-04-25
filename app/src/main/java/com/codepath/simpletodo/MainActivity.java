@@ -12,17 +12,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.codepath.simpletodo.storage.SimpleTodoStorage;
-import com.codepath.simpletodo.storage.impl.FileSimpleTodoStorage;
+import com.codepath.simpletodo.storage.impl.sqllite.SqlLiteSimpleTodoStorage;
+import com.codepath.simpletodo.model.ToDoItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * The main activity of creating, listing and deleting todo items.
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
+    private ArrayList<ToDoItem> items;
+    private ArrayAdapter<ToDoItem> itemsAdapter;
     private ListView lvItems;
     private final int REQUEST_CODE = 20;
     private SimpleTodoStorage storage;
@@ -35,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvlItems);
-        storage = new FileSimpleTodoStorage(getFilesDir());
-        items = storage.readItems();
+        //storage = new FileSimpleTodoStorage(getFilesDir());
+        storage = new SqlLiteSimpleTodoStorage(getApplicationContext());
+        items = storage.read();
         itemsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
@@ -53,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter,
                         View item, int pos, long id) {
-                        items.remove(pos);
+                        ToDoItem deletedItem = items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
-                        storage.writeItems(items);
+                        storage.delete(deletedItem);
                         return true;
                     }
                 });
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapter,
                                                    View item, int pos, long id) {
                         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                        i.putExtra("item", items.get(pos));
+                        i.putExtra("item", items.get(pos).getName());
                         i.putExtra("pos", pos);
                         startActivityForResult(i, REQUEST_CODE);
                     }
@@ -84,10 +87,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.quit:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -96,9 +102,11 @@ public class MainActivity extends AppCompatActivity {
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+        ToDoItem newItem = new ToDoItem(null, itemText, "TODO Notes", ToDoItem.Priority.HIGH, new Date(), ToDoItem.Status.TODO);
+
+        itemsAdapter.add(newItem);
         etNewItem.setText("");
-        storage.writeItems(items);
+        storage.write(newItem);
     }
 
     /**
@@ -107,11 +115,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String item = data.getExtras().getString("item");
+            String name = data.getExtras().getString("item");
             int pos = data.getExtras().getInt("pos", 0);
-            items.set(pos, item);
+
+            ToDoItem editedItem = items.get(pos);
+            editedItem.setName(name);
+
             itemsAdapter.notifyDataSetChanged();
-            storage.writeItems(items);
+            storage.write(editedItem);
         }
     }
 }

@@ -1,15 +1,16 @@
 package com.codepath.simpletodo.storage;
 
-import java.io.File;
 import java.util.ArrayList;
+import com.codepath.simpletodo.model.ToDoItem;
 
 /**
  * Interface for todo item storage.
  */
 public interface SimpleTodoStorage {
 
+    public ArrayList<ToDoItem> read();
 
-    public ArrayList<String> readItems();
+    public void write(ToDoItem item);
 
-    public void writeItems(ArrayList<String> items);
+    public void delete(ToDoItem item);
 }
