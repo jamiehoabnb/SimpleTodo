@@ -13,7 +13,6 @@
 
     <string-array name="status_arrays">
         <item>To Do</item>
-        <item>In Progress</item>
         <item>Done</item>
     </string-array>
 </resources>

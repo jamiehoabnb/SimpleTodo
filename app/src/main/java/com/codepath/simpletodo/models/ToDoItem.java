@@ -18,7 +18,7 @@ public class ToDoItem implements Serializable {
 
     public static enum Status {
 
-        TODO(0), IN_PROGRESS(1), DONE(2);
+        TODO(0), DONE(1);
 
         private int val;
 
@@ -35,8 +35,6 @@ public class ToDoItem implements Serializable {
                 case 0:
                     return TODO;
                 case 1:
-                    return IN_PROGRESS;
-                case 2:
                     return DONE;
             }
             return null;

@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--main.xml-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffccd0"
     tools:context=".activities.MainActivity">
-
-    <ListView
-        android:layout_width="wrap_content"
+    >
+    <RelativeLayout android:id="@+id/rl_country_heading"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lvlItems"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-</RelativeLayout>
+        android:background="#555555">
+        <TextView android:id="@+id/tvTask"
+            android:layout_width="135dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Task"
+            android:textStyle="normal|bold"
+            android:textColor="#FFFFFF"
+            android:textSize="18dip">
+        </TextView>
+        <TextView android:id="@+id/tvPriority"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Priority"
+            android:textStyle="normal|bold"
+            android:textColor="#FFFFFF"
+            android:textSize="18dip"
+            android:layout_toRightOf="@+id/tvTask">
+        </TextView>
+        <TextView android:id="@+id/tvDueDate"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Due"
+            android:textStyle="normal|bold"
+            android:textColor="#FFFFFF"
+            android:textSize="18dip"
+            android:layout_toRightOf="@+id/tvPriority">
+        </TextView>
+        <TextView android:id="@+id/tvStatus"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Done"
+            android:textStyle="normal|bold"
+            android:textColor="#FFFFFF"
+            android:textSize="18dip"
+            android:layout_toRightOf="@+id/tvDueDate">
+        </TextView>
+    </RelativeLayout>
+    <LinearLayout android:id="@+id/ll_country"
+        android:layout_height="fill_parent" android:layout_width="fill_parent">
+        <ScrollView android:id="@+id/ScrollView11"
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            android:fillViewport="true">
+            <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip">
+                <TableLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/taskTable"
+                    android:stretchColumns="0,1">
+                </TableLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
