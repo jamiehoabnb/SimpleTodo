@@ -1,4 +1,4 @@
-package com.codepath.simpletodo;
+package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,16 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
-import com.codepath.simpletodo.adapter.ToDoItemAdapter;
-import com.codepath.simpletodo.storage.SimpleTodoStorage;
-import com.codepath.simpletodo.storage.impl.sqllite.SqlLiteSimpleTodoStorage;
-import com.codepath.simpletodo.model.ToDoItem;
+import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.adapters.ToDoItemsAdapter;
+import com.codepath.simpletodo.utils.storage.SimpleTodoStorage;
+import com.codepath.simpletodo.utils.storage.impl.sqllite.SimpleTodoStorageDbHelper;
+import com.codepath.simpletodo.models.ToDoItem;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 
 /**
  * The main activity of creating, listing and deleting todo items.
@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvlItems);
         //storage = new FileSimpleTodoStorage(getFilesDir());
-        storage = new SqlLiteSimpleTodoStorage(getApplicationContext());
+        storage = new SimpleTodoStorageDbHelper(getApplicationContext());
         items = storage.read();
-        itemsAdapter = new ToDoItemAdapter(this,
+        itemsAdapter = new ToDoItemsAdapter(this,
                 android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapter,
                                                    View item, int pos, long id) {
                         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                        i.putExtra("item", items.get(pos).getName());
+                        i.putExtra("item", items.get(pos));
                         i.putExtra("pos", pos);
                         startActivityForResult(i, REQUEST_CODE);
                     }
@@ -89,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (item.getItemId()) {
+            case R.id.add:
+                Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+                i.putExtra("item", new ToDoItem());
+                i.putExtra("pos", items.size());
+                startActivityForResult(i, REQUEST_CODE);
+
+                return true;
             case R.id.quit:
                 finish();
                 return true;
@@ -98,30 +105,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Create a new todo item.
-     */
-    public void onAddItem(View v) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
-        ToDoItem newItem = new ToDoItem(null, itemText, "TODO Notes", ToDoItem.Priority.HIGH, new Date(), ToDoItem.Status.TODO);
-
-        itemsAdapter.add(newItem);
-        etNewItem.setText("");
-        storage.write(newItem);
-    }
-
-    /**
      * Save the edited todo item.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String name = data.getExtras().getString("item");
-            int pos = data.getExtras().getInt("pos", 0);
-
-            ToDoItem editedItem = items.get(pos);
-            editedItem.setName(name);
-
+            ToDoItem editedItem  = (ToDoItem) data.getSerializableExtra("item");
+            int pos = data.getIntExtra("pos", 0);
+            if (pos == items.size()) {
+                items.add(editedItem);
+            } else {
+                items.set(pos, editedItem);
+            }
+            Collections.sort(items, new ToDoItem.ToDoItemComparator());
             itemsAdapter.notifyDataSetChanged();
             storage.write(editedItem);
         }

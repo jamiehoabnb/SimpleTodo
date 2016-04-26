@@ -1,13 +1,15 @@
-package com.codepath.simpletodo.model;
+package com.codepath.simpletodo.models;
 
+import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * The ToDo item.
  */
-public class ToDoItem {
+public class ToDoItem implements Serializable {
 
-    private Integer id;
+    private Long id;
     private String name;
     private String notes;
     private Priority priority;
@@ -69,9 +71,26 @@ public class ToDoItem {
         }
     }
 
-    public ToDoItem(){}
+    public static class ToDoItemComparator implements Comparator<ToDoItem> {
 
-    public ToDoItem(Integer id, String name, String notes, Priority priority, Date dueDate, Status status) {
+        @Override
+        public int compare(ToDoItem lhs, ToDoItem rhs) {
+            if (lhs.getPriority() != rhs.getPriority()) {
+                //Sort by priority in descending order.
+                return new Integer(rhs.getPriority().getVal()).compareTo(
+                        new Integer(lhs.getPriority().getVal()));
+            }
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    }
+
+    public ToDoItem(){
+        dueDate = new Date();
+        priority = Priority.MEDIUM;
+        status = Status.TODO;
+    }
+
+    public ToDoItem(Long id, String name, String notes, Priority priority, Date dueDate, Status status) {
         this.id = id;
         this.name = name;
         this.notes = notes;
@@ -80,11 +99,11 @@ public class ToDoItem {
         this.status = status;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

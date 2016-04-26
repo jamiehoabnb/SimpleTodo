@@ -1,7 +1,7 @@
-package com.codepath.simpletodo.storage;
+package com.codepath.simpletodo.utils.storage;
 
 import java.util.ArrayList;
-import com.codepath.simpletodo.model.ToDoItem;
+import com.codepath.simpletodo.models.ToDoItem;
 
 /**
  * Interface for todo item storage.

@@ -1,4 +1,4 @@
-package com.codepath.simpletodo.storage.impl.sqllite;
+package com.codepath.simpletodo.utils.storage.impl.sqllite;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.codepath.simpletodo.storage.SimpleTodoStorage;
+import com.codepath.simpletodo.utils.storage.SimpleTodoStorage;
 
 import java.util.ArrayList;
 import java.util.Date;
-import com.codepath.simpletodo.model.ToDoItem;
+import com.codepath.simpletodo.models.ToDoItem;
 
 /**
  * SQLLite storage implementation of SimpleTodoStorage.
  */
-public class SqlLiteSimpleTodoStorage extends SQLiteOpenHelper implements SimpleTodoStorage {
+public class SimpleTodoStorageDbHelper extends SQLiteOpenHelper implements SimpleTodoStorage {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ToDo.db";
@@ -47,7 +47,7 @@ public class SqlLiteSimpleTodoStorage extends SQLiteOpenHelper implements Simple
         public static final String COLUMN_NAME_STATUS = "status";
     }
 
-    public SqlLiteSimpleTodoStorage(Context context) {
+    public SimpleTodoStorageDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
@@ -67,21 +67,21 @@ public class SqlLiteSimpleTodoStorage extends SQLiteOpenHelper implements Simple
         ArrayList<ToDoItem> items = new ArrayList<>();
 
         final String POSTS_SELECT_QUERY =
-                String.format("SELECT * FROM %s ORDER BY %s", ToDoItemTable.TABLE_NAME,
-                        ToDoItemTable.COLUMN_NAME_PRIORITY);
+                String.format("SELECT * FROM %s ORDER BY %s desc, %s", ToDoItemTable.TABLE_NAME,
+                        ToDoItemTable.COLUMN_NAME_PRIORITY, ToDoItemTable.COLUMN_NAME_NAME);
         Cursor cursor = null;
         try {
             cursor = db.rawQuery(POSTS_SELECT_QUERY, null);
             if (cursor.moveToFirst()) {
                 do {
-                    int id = cursor.getInt(cursor.getColumnIndex(ToDoItemTable._ID));
+                    long id = cursor.getLong(cursor.getColumnIndex(ToDoItemTable._ID));
                     String name = cursor.getString(cursor.getColumnIndex(ToDoItemTable.COLUMN_NAME_NAME));
                     String notes = cursor.getString(cursor.getColumnIndex(ToDoItemTable.COLUMN_NAME_NOTES));
                     int priority = cursor.getInt(cursor.getColumnIndex(ToDoItemTable.COLUMN_NAME_PRIORITY));
                     int status = cursor.getInt(cursor.getColumnIndex(ToDoItemTable.COLUMN_NAME_STATUS));
                     int dueDate = cursor.getInt(cursor.getColumnIndex(ToDoItemTable.COLUMN_NAME_DUE_DATE));
                     items.add(new ToDoItem(id, name, notes, ToDoItem.Priority.getPriority(priority),
-                            new Date(dueDate*1000), ToDoItem.Status.getStatus(status)));
+                            new Date(((long) dueDate)*1000l), ToDoItem.Status.getStatus(status)));
                 } while(cursor.moveToNext());
             }
         } catch (Throwable t) {
@@ -101,14 +101,17 @@ public class SqlLiteSimpleTodoStorage extends SQLiteOpenHelper implements Simple
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
+            int dueDate = (int) (item.getDueDate().getTime()/1000l);
+
             values.put(ToDoItemTable.COLUMN_NAME_NAME, item.getName());
             values.put(ToDoItemTable.COLUMN_NAME_NOTES, item.getNotes());
             values.put(ToDoItemTable.COLUMN_NAME_PRIORITY, item.getPriority().getVal());
-            values.put(ToDoItemTable.COLUMN_NAME_DUE_DATE, (item.getDueDate().getTime()/1000));
+            values.put(ToDoItemTable.COLUMN_NAME_DUE_DATE, dueDate);
             values.put(ToDoItemTable.COLUMN_NAME_STATUS, item.getStatus().getVal());
 
             if (item.getId() == null) {
-                db.insertOrThrow(ToDoItemTable.TABLE_NAME, null, values);
+                long newId = db.insertOrThrow(ToDoItemTable.TABLE_NAME, null, values);
+                item.setId(newId);
             } else {
                 String selection = ToDoItemTable._ID + " = ?";
                 String[] selectionArgs = { String.valueOf(item.getId()) };

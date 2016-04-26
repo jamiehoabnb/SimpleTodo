@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">SimpleTodo</string>
+
+    <string name="priority_prompt">Choose a priority</string>
+
+    <string-array name="priority_arrays">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <string name="status_prompt">Choose a status</string>
+
+    <string-array name="status_arrays">
+        <item>To Do</item>
+        <item>In Progress</item>
+        <item>Done</item>
+    </string-array>
 </resources>
