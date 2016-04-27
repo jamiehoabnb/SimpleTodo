@@ -167,18 +167,17 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
 
             tvTask = new TextView(this);
             tvTask.setText(item.getName());
-            tvTask.setTextColor(Color.parseColor("#555555"));
+            tvTask.setTextColor(getResources().getColor(R.color.text_main));
             tvTask.setId(index);
             tvTask.setClickable(true);
             tvTask.setGravity(Gravity.LEFT);
 
 
             tvPriority = new TextView(this);
-            tvPriority.setTextColor(Color.RED);
             tvPriority.setGravity(Gravity.LEFT);
 
             tvDueDate = new TextView(this);
-            tvDueDate.setTextColor(Color.parseColor("#555555"));
+            tvDueDate.setTextColor(getResources().getColor(R.color.text_main));
             tvDueDate.setGravity(Gravity.LEFT);
 
             cbStatus = new CheckBox(this);
@@ -219,13 +218,13 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
 
             switch (item.getPriority()) {
                 case HIGH:
-                    tvPriority.setTextColor(Color.RED);
+                    tvPriority.setTextColor(getResources().getColor(R.color.priority_high));
                     break;
                 case MEDIUM:
-                    tvPriority.setTextColor(Color.YELLOW);
+                    tvPriority.setTextColor(getResources().getColor(R.color.priority_medium));
                     break;
                 case LOW:
-                    tvPriority.setTextColor(Color.GREEN);
+                    tvPriority.setTextColor(getResources().getColor(R.color.priority_low));
                     break;
             }
 
