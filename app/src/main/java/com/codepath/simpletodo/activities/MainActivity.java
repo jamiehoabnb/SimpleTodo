@@ -1,12 +1,15 @@
 package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.fragments.CreateEditToDoItemDialogFragment;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.utils.storage.SimpleTodoStorage;
 import com.codepath.simpletodo.utils.storage.impl.sqllite.SimpleTodoStorageDbHelper;
@@ -27,10 +31,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CreateEditToDoItemDialogFragment.CreateEditToDoItemDialogListener {
     private ArrayList<ToDoItem> items;
     TableLayout taskTable;
-    private final int REQUEST_CODE = 20;
     private SimpleTodoStorage storage;
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("MMddyy", Locale.US);
 
@@ -46,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
     void fillTaskTable() {
 
         taskTable.removeAllViews();
+
+        int dip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                (float) 1, getResources().getDisplayMetrics());
+
         TableRow row;
         TextView tvTask, tvPriority, tvDueDate;
         CheckBox tvStatus;
-        int dip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                (float) 1, getResources().getDisplayMetrics());
 
         int index = 0;
         for (ToDoItem item: items) {
@@ -60,10 +65,13 @@ public class MainActivity extends AppCompatActivity {
             tvTask.setTextColor(Color.BLUE);
             tvTask.setId(index);
             tvTask.setClickable(true);
+            tvTask.setGravity(Gravity.LEFT);
+
             SpannableString taskStr = new SpannableString(item.getName());
             taskStr.setSpan(new UnderlineSpan(), 0, taskStr.length(), 0);
             tvTask.setText(taskStr);
 
+            //Delete when long clicked.
             tvTask.setOnLongClickListener(
                     new AdapterView.OnLongClickListener() {
                         @Override
@@ -75,24 +83,33 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-            //Edit the item that is long clicked.
+            //Edit when clicked.
             tvTask.setOnClickListener(
                     new AdapterView.OnClickListener() {
                         @Override
                         public void onClick(View item) {
-                            Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                            i.putExtra("item", items.get(item.getId()));
-                            i.putExtra("pos", item.getId());
-                            startActivityForResult(i, REQUEST_CODE);
+                            FragmentManager fm = getFragmentManager();
+                            CreateEditToDoItemDialogFragment todoFragment = new CreateEditToDoItemDialogFragment();
+                            Bundle args = new Bundle();
+                            args.putSerializable("item", items.get(item.getId()));
+                            args.putInt("pos", item.getId());
+                            todoFragment.setArguments(args);
+                            todoFragment.show(fm, "fragment_create_edit_todo");
+
                         }
                     });
 
             tvPriority = new TextView(this);
             tvPriority.setTextColor(Color.RED);
+            tvPriority.setGravity(Gravity.LEFT);
+
             tvDueDate = new TextView(this);
-            tvDueDate.setTextColor(Color.RED);
+            tvDueDate.setTextColor(Color.parseColor("#555555"));
+            tvDueDate.setGravity(Gravity.LEFT);
+
             tvStatus = new CheckBox(this);
             tvStatus.setId(index);
+            tvStatus.setGravity(Gravity.CENTER);
 
             index++;
 
@@ -162,10 +179,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.add:
-                Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                i.putExtra("item", new ToDoItem());
-                i.putExtra("pos", items.size());
-                startActivityForResult(i, REQUEST_CODE);
+                FragmentManager fm = getFragmentManager();
+                CreateEditToDoItemDialogFragment todoFragment = new CreateEditToDoItemDialogFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("item", new ToDoItem());
+                args.putInt("pos", items.size());
+                todoFragment.setArguments(args);
+                todoFragment.show(fm, "fragment_create_edit_todo");
 
                 return true;
             case R.id.quit:
@@ -176,22 +196,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Save the edited todo item.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            ToDoItem editedItem  = (ToDoItem) data.getSerializableExtra("item");
-            int pos = data.getIntExtra("pos", 0);
-            if (pos == items.size()) {
-                items.add(editedItem);
-            } else {
-                items.set(pos, editedItem);
-            }
-            Collections.sort(items, new ToDoItem.ToDoItemComparator());
-            storage.write(editedItem);
-            fillTaskTable();
+    public void onFinishDialog(ToDoItem item, int pos) {
+        if (pos == items.size()) {
+            items.add(item);
+        } else {
+            items.set(pos, item);
         }
+        Collections.sort(items, new ToDoItem.ToDoItemComparator());
+        storage.write(item);
+        fillTaskTable();
     }
 }

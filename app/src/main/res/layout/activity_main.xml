@@ -36,7 +36,7 @@
             android:layout_width="70dip"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Due"
+            android:text="   Due"
             android:textStyle="normal|bold"
             android:textColor="#FFFFFF"
             android:textSize="18dip"

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#ffccd0"
+    tools:context=".fragments.CreateEditToDoItemDialogFragment">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Task Name" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/etDueDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Due Date" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/etNotes"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:inputType="text|textMultiLine"
+            android:hint="Notes" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvPriorityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Priority">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinnerPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/priority_arrays"
+        android:prompt="@string/priority_prompt" />
+
+    <TextView
+        android:id="@+id/tvStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinnerStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/status_arrays"
+        android:prompt="@string/status_prompt" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:id="@+id/btnSaveItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:text="Save"/>
+        <Space
+            android:layout_width="25dip"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/btnCancelItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:text="Cancel"/>
+    </LinearLayout>
+</LinearLayout>
