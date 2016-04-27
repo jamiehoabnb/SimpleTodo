@@ -166,14 +166,12 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
             row = new TableRow(this);
 
             tvTask = new TextView(this);
-            tvTask.setTextColor(Color.BLUE);
+            tvTask.setText(item.getName());
+            tvTask.setTextColor(Color.parseColor("#555555"));
             tvTask.setId(index);
             tvTask.setClickable(true);
             tvTask.setGravity(Gravity.LEFT);
 
-            SpannableString taskStr = new SpannableString(item.getName());
-            taskStr.setSpan(new UnderlineSpan(), 0, taskStr.length(), 0);
-            tvTask.setText(taskStr);
 
             tvPriority = new TextView(this);
             tvPriority.setTextColor(Color.RED);
@@ -215,9 +213,9 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
             tvPriority.setTypeface(null, 1);
             tvDueDate.setTypeface(null, 1);
 
-            tvTask.setTextSize(11);
-            tvPriority.setTextSize(11);
-            tvDueDate.setTextSize(11);
+            tvTask.setTextSize(12);
+            tvPriority.setTextSize(12);
+            tvDueDate.setTextSize(12);
 
             switch (item.getPriority()) {
                 case HIGH:
