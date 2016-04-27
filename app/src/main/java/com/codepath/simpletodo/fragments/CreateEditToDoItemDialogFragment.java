@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.codepath.simpletodo.R;
@@ -62,7 +63,7 @@ public class CreateEditToDoItemDialogFragment extends DialogFragment implements 
         item = (ToDoItem) getArguments().getSerializable("item");
         pos = getArguments().getInt("pos", 0);
 
-        Button saveButton = (Button) view.findViewById(R.id.btnSaveItem);
+        ImageButton saveButton = (ImageButton) view.findViewById(R.id.btnSaveItem);
         saveButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +90,7 @@ public class CreateEditToDoItemDialogFragment extends DialogFragment implements 
             }
         });
 
-        Button cancelButton = (Button) view.findViewById(R.id.btnCancelItem);
+        ImageButton cancelButton = (ImageButton) view.findViewById(R.id.btnCancelItem);
         cancelButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {

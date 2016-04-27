@@ -1,7 +1,6 @@
 package com.codepath.simpletodo.activities;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.FragmentManager;
@@ -9,13 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,10 +34,111 @@ import java.util.Collections;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements CreateEditToDoItemDialogFragment.CreateEditToDoItemDialogListener {
-    private ArrayList<ToDoItem> items;
-    TableLayout taskTable;
+    private static ArrayList<ToDoItem> items;
+    private TableLayout taskTable;
     private SimpleTodoStorage storage;
+
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("MMddyy", Locale.US);
+
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+    private static class RowOnTouchListener implements View.OnTouchListener {
+
+        private GestureDetector gestureDetector;
+
+        private RowOnTouchListener(Context context, RowGesterListener listener) {
+            gestureDetector = new GestureDetector(context, listener);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+    }
+
+    private static class RowGesterListener extends GestureDetector.SimpleOnGestureListener {
+        //The task text view.
+        private View textView;
+
+        //The task check box.
+        private CheckBox checkbox;
+
+        //The table row.
+        private TableRow row;
+
+        private ImageButton deleteButton;
+
+        private MainActivity context;
+        private FragmentManager fragmentManager;
+
+        public RowGesterListener(View textView, CheckBox checkbox, TableRow row, MainActivity context,
+                                 FragmentManager fragmentManager) {
+            this.textView = textView;
+            this.context = context;
+            this.fragmentManager = fragmentManager;
+            this.checkbox = checkbox;
+            this.row = row;
+            this.deleteButton = null;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            try {
+                if(e1.getX() > e2.getX()) {
+                    if (deleteButton != null) {
+                        return false;
+                    }
+
+                    row.removeView(checkbox);
+                    deleteButton = new ImageButton(context);
+                    deleteButton.setImageResource(R.drawable.delete);
+                    deleteButton.setBackgroundColor(context.getResources().getColor(R.color.bg_main));
+
+                    deleteButton.setOnClickListener(new AdapterView.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ToDoItem deletedItem = items.remove(textView.getId());
+                            context.storage.delete(deletedItem);
+                            context.fillTaskTable();
+                        }
+                    });
+
+                    row.addView(deleteButton);
+
+
+                }  else if (e2.getX() > e1.getX()) {
+
+                    if (deleteButton == null) {
+                        return false;
+                    }
+
+                    row.removeView(deleteButton);
+                    deleteButton = null;
+                    row.addView(checkbox);
+                }
+            } catch (Exception e) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            CreateEditToDoItemDialogFragment todoFragment = new CreateEditToDoItemDialogFragment();
+            Bundle args = new Bundle();
+            args.putSerializable("item", items.get(textView.getId()));
+            args.putInt("pos", textView.getId());
+            todoFragment.setArguments(args);
+            todoFragment.show(fragmentManager, "fragment_create_edit_todo");
+            return true;
+        }
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
 
         TableRow row;
         TextView tvTask, tvPriority, tvDueDate;
-        CheckBox tvStatus;
+        CheckBox cbStatus;
 
         int index = 0;
         for (ToDoItem item: items) {
@@ -107,13 +210,17 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
             tvDueDate.setTextColor(Color.parseColor("#555555"));
             tvDueDate.setGravity(Gravity.LEFT);
 
-            tvStatus = new CheckBox(this);
-            tvStatus.setId(index);
-            tvStatus.setGravity(Gravity.CENTER);
+            cbStatus = new CheckBox(this);
+            cbStatus.setId(index);
+            cbStatus.setGravity(Gravity.CENTER);
+
+            tvTask.setOnTouchListener(new RowOnTouchListener(this,
+                    new RowGesterListener(tvTask, cbStatus, row, MainActivity.this,
+                            getFragmentManager())));
 
             index++;
 
-            tvStatus.setOnClickListener(
+            cbStatus.setOnClickListener(
                     new AdapterView.OnClickListener() {
                         @Override
                         public void onClick(View item) {
@@ -151,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
                     break;
             }
 
-            tvStatus.setChecked(item.getStatus() == ToDoItem.Status.DONE);
+            cbStatus.setChecked(item.getStatus() == ToDoItem.Status.DONE);
 
             tvTask.setWidth(135 * dip);
             tvPriority.setWidth(70 * dip);
@@ -159,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
             row.addView(tvTask);
             row.addView(tvPriority);
             row.addView(tvDueDate);
-            row.addView(tvStatus);
+            row.addView(cbStatus);
 
             taskTable.addView(row, new TableLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

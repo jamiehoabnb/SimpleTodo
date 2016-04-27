@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/add"
-        android:title="Add Task" />
+        android:title="Add Task"
+        android:icon="@drawable/plus"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/quit"
-        android:title="Exit" />
+        android:title="Exit"
+        android:icon="@drawable/exit"
+        app:showAsAction="ifRoom"/>
 </menu>
