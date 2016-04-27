@@ -56,7 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/priority_arrays"
-        android:prompt="@string/priority_prompt" />
+        android:prompt="@string/priority_prompt"
+        android:popupBackground="@color/colorPrimary"/>
 
     <TextView
         android:id="@+id/tvStatusLabel"
@@ -70,7 +71,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/status_arrays"
-        android:prompt="@string/status_prompt" />
+        android:prompt="@string/status_prompt"
+        android:popupBackground="@color/colorPrimary"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
