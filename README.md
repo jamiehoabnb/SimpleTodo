@@ -19,7 +19,7 @@ The following **optional** features are implemented:
 * [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [x] Improve style of the todo items in the list.  NOTE:  I initially used an ArrayAdapter with ListView but decided to switch to a TableLayout.
 * [x] Add support for completion due dates for todo items (and display within tablelayout)
-* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
+* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for creating and editing items
 * [x] Add support for selecting the priority of each todo item (and display in tablelayout)
 * [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
