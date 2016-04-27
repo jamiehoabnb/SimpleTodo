@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleTodo</string>
+    <string name="app_name">Simple To Do</string>
 
     <string name="priority_prompt">Choose a priority</string>
 

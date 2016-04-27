@@ -139,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         taskTable =(TableLayout)findViewById(R.id.taskTable);
         storage = new SimpleTodoStorageDbHelper(getApplicationContext());
         items = storage.read();
