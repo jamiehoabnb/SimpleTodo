@@ -35,6 +35,10 @@ public class SimpleTodoStorageDbHelper extends SQLiteOpenHelper implements Simpl
                     ToDoItemTable.COLUMN_NAME_STATUS + INTEGER_TYPE +
             " )";
 
+    private final String POSTS_SELECT_QUERY =
+            String.format("SELECT * FROM %s ORDER BY %s desc, %s", ToDoItemTable.TABLE_NAME,
+                    ToDoItemTable.COLUMN_NAME_PRIORITY, ToDoItemTable.COLUMN_NAME_DUE_DATE);
+
     private static final String SQL_DELETE_TABLE =
             "DROP TABLE IF EXISTS " + ToDoItemTable.TABLE_NAME;
 
@@ -65,10 +69,6 @@ public class SimpleTodoStorageDbHelper extends SQLiteOpenHelper implements Simpl
     public ArrayList<ToDoItem> read() {
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<ToDoItem> items = new ArrayList<>();
-
-        final String POSTS_SELECT_QUERY =
-                String.format("SELECT * FROM %s ORDER BY %s desc, %s", ToDoItemTable.TABLE_NAME,
-                        ToDoItemTable.COLUMN_NAME_PRIORITY, ToDoItemTable.COLUMN_NAME_NAME);
         Cursor cursor = null;
         try {
             cursor = db.rawQuery(POSTS_SELECT_QUERY, null);

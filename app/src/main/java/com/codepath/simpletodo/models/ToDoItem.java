@@ -78,7 +78,8 @@ public class ToDoItem implements Serializable {
                 return new Integer(rhs.getPriority().getVal()).compareTo(
                         new Integer(lhs.getPriority().getVal()));
             }
-            return lhs.getName().compareTo(rhs.getName());
+            //Sort by due date in ascending order
+            return lhs.getDueDate().compareTo(rhs.getDueDate());
         }
     }
 
