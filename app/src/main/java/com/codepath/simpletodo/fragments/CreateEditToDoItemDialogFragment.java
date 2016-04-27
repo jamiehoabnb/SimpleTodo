@@ -145,7 +145,7 @@ public class CreateEditToDoItemDialogFragment extends DialogFragment implements 
         Point size = new Point();
         Display display = window.getWindowManager().getDefaultDisplay();
         display.getSize(size);
-        window.setLayout((int) (size.x), (int) (size.y));
+        window.setLayout((int) (size.x), (int) ((size.y)*.75));
         window.setGravity(Gravity.CENTER);
         super.onResume();
     }
