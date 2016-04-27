@@ -40,10 +40,6 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
 
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("MMddyy", Locale.US);
 
-    private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
     private static class RowOnTouchListener implements View.OnTouchListener {
 
         private GestureDetector gestureDetector;
@@ -173,34 +169,6 @@ public class MainActivity extends AppCompatActivity implements CreateEditToDoIte
             SpannableString taskStr = new SpannableString(item.getName());
             taskStr.setSpan(new UnderlineSpan(), 0, taskStr.length(), 0);
             tvTask.setText(taskStr);
-
-            //Delete when long clicked.
-            tvTask.setOnLongClickListener(
-                    new AdapterView.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View item) {
-                            ToDoItem deletedItem = items.remove(item.getId());
-                            storage.delete(deletedItem);
-                            fillTaskTable();
-                            return true;
-                        }
-                    });
-
-            //Edit when clicked.
-            tvTask.setOnClickListener(
-                    new AdapterView.OnClickListener() {
-                        @Override
-                        public void onClick(View item) {
-                            FragmentManager fm = getFragmentManager();
-                            CreateEditToDoItemDialogFragment todoFragment = new CreateEditToDoItemDialogFragment();
-                            Bundle args = new Bundle();
-                            args.putSerializable("item", items.get(item.getId()));
-                            args.putInt("pos", item.getId());
-                            todoFragment.setArguments(args);
-                            todoFragment.show(fm, "fragment_create_edit_todo");
-
-                        }
-                    });
 
             tvPriority = new TextView(this);
             tvPriority.setTextColor(Color.RED);
