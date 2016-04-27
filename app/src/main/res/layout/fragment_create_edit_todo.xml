@@ -41,7 +41,7 @@
         android:layout_gravity="left">
         <EditText android:id="@+id/etNotes"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="125dp"
             android:inputType="text|textMultiLine"
             android:hint="@string/notes" />
     </android.support.design.widget.TextInputLayout>
