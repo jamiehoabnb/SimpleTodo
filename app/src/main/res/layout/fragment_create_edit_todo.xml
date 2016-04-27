@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="Task Name" />
+            android:hint="@string/task_name" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="Due Date" />
+            android:hint="@string/due_date" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -43,14 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:inputType="text|textMultiLine"
-            android:hint="Notes" />
+            android:hint="@string/notes" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/tvPriorityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Priority"
+        android:text="@string/priority"
         android:layout_gravity="left">
     </TextView>
 
@@ -67,7 +67,7 @@
         android:id="@+id/tvStatusLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status"
+        android:text="@string/status"
         android:layout_gravity="left">
     </TextView>
 

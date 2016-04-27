@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">Simple To Do</string>
 
-    <string name="priority_prompt">Choose a priority</string>
+    <string name="add_a_task">Add Task</string>
+    <string name="done">Done</string>
+    <string name="due">   Due</string>
+    <string name="due_date">Due Date</string>
+    <string name="exit">Exit</string>
+    <string name="notes">Notes</string>
+    <string name="task">Task</string>
+    <string name="task_name">Task Name</string>
+    <string name="priority">Priority</string>
+    <string name="priority_prompt">Select a priority</string>
+    <string name="status">Status</string>
 
     <string-array name="priority_arrays">
         <item>Low</item>
