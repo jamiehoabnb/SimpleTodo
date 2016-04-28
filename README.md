@@ -27,7 +27,7 @@ The following **additional** features are implemented:
 
 * [x] Use checkboxes to mark todo items done.
 * [x] Sort by priority and due date.
-* [x] Support left swipe to show delete icon (just like in email apps).
+* [x] Support left swipe to show delete icon (just like in email apps).  Right swipe to hide the delete icon.
 * [x] Added custom app icon.
 * [x] Added logo to action bar.
 
