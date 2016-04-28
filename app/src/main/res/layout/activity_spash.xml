@@ -16,16 +16,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:src="@drawable/logo_large" />
+        android:src="@drawable/logo_large_unchecked" />
 
     <TextView
+        android:id="@+id/spashTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
         android:textSize="40dp"
-        android:textColor="@color/white_opaque"
+        android:textColor="@color/bg_main"
         android:gravity="center_horizontal"
-        android:text="Simple To Do" />
+        android:text="      Simple To Do" />
 
     <Space
         android:layout_width="70dp"
