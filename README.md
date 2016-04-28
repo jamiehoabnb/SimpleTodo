@@ -4,7 +4,7 @@ SimpleTodo is an android app that allows building a todo list and basic todo ite
 
 Submitted by: Jamie Ho
 
-Time spent: 3 hours spent in total
+Time spent: 9 hours spent in total
 
 ## User Stories
 
@@ -16,22 +16,26 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-* [ ] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
-* [ ] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
-* [ ] Add support for completion due dates for todo items (and display within listview item)
-* [ ] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
-* [ ] Add support for selecting the priority of each todo item (and display in listview item)
-* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+* [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
+* [x] Improve style of the todo items in the list.  NOTE:  I initially used an ArrayAdapter with ListView but decided to switch to a TableLayout.
+* [x] Add support for completion due dates for todo items (and display within tablelayout)
+* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for creating and editing items
+* [x] Add support for selecting the priority of each todo item (and display in tablelayout)
+* [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Use checkboxes to mark todo items done.
+* [x] Sort by priority and due date.
+* [x] Support left swipe to show delete icon (just like in email apps).  Right swipe to hide the delete icon.
+* [x] Added custom app icon and logo to action bar.
+* [x] Added splash screen with animation.
 
 ## SimpleTodo
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/Hog9WYq.gif?1' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/oXmrFlX.gif?1' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
