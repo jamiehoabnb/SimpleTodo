@@ -30,6 +30,7 @@ The following **additional** features are implemented:
 * [x] Support left swipe to show delete icon (just like in email apps).  Right swipe to hide the delete icon.
 * [x] Added custom app icon and logo to action bar.
 * [x] Added splash screen with animation.
+* [x] Improved the organization of my code and met Android style guidelines.
 
 ## SimpleTodo
 
